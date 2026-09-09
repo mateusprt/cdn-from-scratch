@@ -67,7 +67,7 @@ func writeResponse(w http.ResponseWriter, entry cache.Entry, status string) {
 func main() {
 	originURL := os.Getenv("ORIGIN_URL")
 	if originURL == "" {
-		originURL = "http://origin:4000"
+		originURL = "http://origin:8001"
 	}
 
 	target, err := url.Parse(originURL)
@@ -77,6 +77,6 @@ func main() {
 
 	handler := newHandler(target, cache.New(), &singleflight.Group{})
 
-	log.Println("edge listening on :4001, forwarding to", originURL)
-	log.Fatal(http.ListenAndServe(":4001", handler))
+	log.Println("edge listening on :8001, forwarding to", originURL)
+	log.Fatal(http.ListenAndServe(":8001", handler))
 }
