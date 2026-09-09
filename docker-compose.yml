@@ -1,0 +1,28 @@
+
+services: 
+  router:
+    image: nginx:latest
+    ports:
+      - "8080:5000"
+    volumes:
+      - ./nginx/router.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - scrubber1
+
+  scrubber1:
+    build:
+      context: .
+      dockerfile: cmd/scrubber/Dockerfile
+    environment:
+      - EDGE_URL=http://edge1:8001
+  edge1:
+    build:
+      context: .
+      dockerfile: cmd/edge/Dockerfile
+    environment:
+      - ORIGIN_URL=http://origin:4000
+
+  origin:
+    build:
+      context: .
+      dockerfile: cmd/origin/Dockerfile
