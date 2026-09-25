@@ -40,12 +40,14 @@ func newHandler(target *url.URL, limiter *ratelimit.Limiter) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		clientIP := extractIPFromRequest(r)
+		log.Println("Request received from:", clientIP)
 
 		if !limiter.Allow(clientIP) {
 			http.Error(w, "too many requests", http.StatusTooManyRequests)
 			return
 		}
 
+		log.Println("Request forwarded to", target)
 		proxy.ServeHTTP(w, r)
 	})
 }

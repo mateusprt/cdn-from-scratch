@@ -13,6 +13,8 @@ import (
 	"time"
 
 	"github.com/mateusprt/cdn-from-scratch/cmd/cache"
+	"github.com/mateusprt/cdn-from-scratch/cmd/metrics"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"golang.org/x/sync/singleflight"
 )
 
@@ -22,7 +24,10 @@ func newHandler(target *url.URL, c *cache.Cache, bagOfRequests *singleflight.Gro
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		key := r.URL.Path
 
+		log.Println("Request received from:", key)
+
 		if entry, ok := c.Get(key); ok {
+			metrics.CacheRequests.WithLabelValues("hit").Inc()
 			writeResponse(w, entry, "HIT")
 			return
 		}
@@ -38,6 +43,7 @@ func newHandler(target *url.URL, c *cache.Cache, bagOfRequests *singleflight.Gro
 
 		entry := result.(cache.Entry)
 		c.Set(key, entry)
+		metrics.CacheRequests.WithLabelValues("miss").Inc()
 		writeResponse(w, entry, "MISS")
 	})
 }
@@ -77,6 +83,9 @@ func main() {
 
 	handler := newHandler(target, cache.New(), &singleflight.Group{})
 
+	http.Handle("/", handler)
+	http.Handle("/metrics", promhttp.Handler())
+
 	log.Println("edge listening on :8001, forwarding to", originURL)
-	log.Fatal(http.ListenAndServe(":8001", handler))
+	log.Fatal(http.ListenAndServe(":8001", nil))
 }
