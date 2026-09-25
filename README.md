@@ -12,3 +12,7 @@ This project aims to build a simple CDN to better understand how it works. The i
 
 - **Logging and Monitoring Tools**: Prometheus, Grafana and Jaegger;
 
+## References
+
+- [What is a CDN?](https://www.cloudflare.com/pt-br/learning/cdn/what-is-a-cdn/)
+- [Designing a CDN: A-Z of Content Delivery Networks (CDN)](https://medium.com/@roopa.kushtagi/a-z-of-content-delivery-networks-cdn-making-the-internet-faster-and-more-reliable-57786b46a058)
