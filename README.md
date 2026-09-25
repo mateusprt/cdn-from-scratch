@@ -2,7 +2,7 @@
 
 This project aims to build a simple CDN to better understand how it works. The implementation provides a simplified representation of a real-world CDN architecture, consisting of the following components:
 
-- **Routing System**: determines the Edge Server responsible for content delivery. There is a simplification here: in a real-world CDN, the routing system determines the optimal path based on factors such as network proximity and server availability. In this project, the routing system is implemented as an NGINX load balancer, which distributes requests among the Edge Servers using a consistent hashing strategy;
+- **Routing System**: determines the edge server responsible for content delivery. There is a simplification here: in a real-world CDN, the routing system determines the optimal path based on factors such as network proximity and server availability. In this project, the routing system is implemented as an NGINX load balancer, which distributes requests among the Edge Servers using a consistent hashing strategy;
   
 - **Origin Server**: stores the original content;
   
